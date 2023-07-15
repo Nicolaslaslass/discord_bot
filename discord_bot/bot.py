@@ -9,15 +9,28 @@ async def send_message(message, user_message, is_private):
         print(e)
 
 def run_discord_bot():
-    TOKEN = 'MTEwMjI2MDM0MzI4NTIxOTM3OQ.GLAWvY.z6gc2P9jZvqXO4YPDLMaT3iyWV-RJWU59R7MTU'
-    client = discord.Client()
-    
-    
-    
+    TOKEN = 'MTEwMjI2MDM0MzI4NTIxOTM3OQ.G94lJs.cCB0qC-O3F7t2MIFH8WatUnUfc2wG1YB7VzvOI'
+    client = discord.Client(intents=discord.Intents.default())
+
     @client.event
     async def on_ready():
         print(f'{client.user} is now running')
-        
+
+    @client.event
+    async def on_message(message):
+        if message.author == client.user:
+            return
+
+        username = str(message.author)
+        user_message = str(message.content)
+        channel = str(message.channel)
+
+        print(f"{username} said: '{user_message}' ({channel})")
+
+        if user_message.startswith('?'):  # Verificar si el mensaje comienza con '?'
+            user_message = user_message[1:]
+            await send_message(message, user_message, is_private=True)
+        else:
+            await send_message(message, user_message, is_private=False)
+
     client.run(TOKEN)
-    
-    
